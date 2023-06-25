@@ -7,6 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1"
+pandas = "^2.0.1"
+tqdm = "4.64.1"
+matplotlib = "^3.7.1"
+ta = "^0.10.2"
+torch = "^2.0.0"
+pytorch-lightning = "^2.0.2"
+rich = "^13.3.5"
+backtesting = "^0.3.3"
+cufflinks = "^0.17.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -14,7 +23,10 @@ pytest-cov = "^4.0.0"
 pre-commit = "^3.3.1"
 flake8 = "^6.0.0"
 isort = "^5.12.0"
-black = "^23.3.0"
+black = {extras = ["jupyter"], version = "^23.3.0"}
+jupyter-contrib-nbextensions = "^0.7.0"
+widgetsnbextension = "^4.0.7"
+ipywidgets = "^8.0.6"
 
 [build-system]
 requires = ["poetry-core"]

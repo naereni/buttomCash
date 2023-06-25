@@ -9,9 +9,8 @@ import asyncio
 import datetime
 import time
 
-from binance import AsyncClient
-
 from api_keys import API_KEY, API_SECRET
+from binance import AsyncClient
 
 
 async def get_balance(client):
