@@ -1,4 +1,5 @@
 import os
+import urllib
 import zipfile
 from datetime import datetime
 
@@ -9,12 +10,14 @@ from tqdm import tqdm
 BASE_DIR = "src/data"
 BASE_URL = "https://data.binance.vision/data/futures/um/daily"
 FIRST_LINE = "open_time,open,high,low,close,volume,close_time,quote_volume,\
-              count,taker_buy_volume,taker_buy_quote_volume,ignore"
+count,taker_buy_volume,taker_buy_quote_volume,ignore"
 
 
 def get_missing_dates(start_date: str) -> list[str]:
     today = datetime.today().strftime("%Y-%m-%d")
-    miss_dates = pd.date_range(start=start_date, end=today, inclusive='left').to_list()
+    miss_dates = pd.date_range(
+        start=start_date, end=today, inclusive="left"
+    ).to_list()
     miss_dates = [date.strftime("%Y-%m-%d") for date in miss_dates]
     return miss_dates
 
@@ -22,18 +25,19 @@ def get_missing_dates(start_date: str) -> list[str]:
 def collect_orderbook(
     save_dir: str,
     mode: str = "klines",
-    symbol: str = "LTCUSDT",
-    timing: str = "4h",
+    symbol: str = "BTCUSDT",
+    timing: str = "1m",
     start_date="2020-01-01",
 ) -> None:
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
+    if not os.path.exists(f"{save_dir}/{symbol}-{timing}.csv"):
         collect_df = pd.DataFrame(
             columns=[column for column in FIRST_LINE.split(",")]
         )
     else:
         collect_df = pd.read_csv(f"{save_dir}/{symbol}-{timing}.csv")
-        start_date = collect_df.iloc[-1]['date']
+        start_date = collect_df.iloc[-1]["date"]
     missing_dates = get_missing_dates(start_date)
     for date in tqdm(missing_dates):
         download_url = (
@@ -42,10 +46,10 @@ def collect_orderbook(
         locale_name = f"{save_dir}/{symbol}-{timing}-{date}"
         try:
             wget.download(url=download_url, out=save_dir)
-        except:
+        except urllib.error.HTTPError:
             collect_df.to_csv(f"{save_dir}/{symbol}-{timing}.csv")
             break
-            
+
         with zipfile.ZipFile(f"{locale_name}.zip", "r") as zip_ref:
             zip_ref.extractall(save_dir)
 
@@ -73,10 +77,6 @@ def collect_orderbook(
         os.remove(f"{locale_name}.csv")
 
     collect_df.to_csv(f"{save_dir}/{symbol}-{timing}.csv")
-
-
-def update_orderbook():
-    pass
 
 
 if __name__ == "__main__":

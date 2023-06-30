@@ -16,6 +16,10 @@ pytorch-lightning = "^2.0.2"
 rich = "^13.3.5"
 backtesting = "^0.3.3"
 cufflinks = "^0.17.3"
+setuptools = "^68.0.0"
+ta-lib = "^0.4.26"
+pandas-ta = "^0.3.14b0"
+yfinance = "^0.2.22"
 
 
 [tool.poetry.group.dev.dependencies]
