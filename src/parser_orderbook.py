@@ -25,9 +25,9 @@ def get_missing_dates(start_date: str) -> list[str]:
 def collect_orderbook(
     save_dir: str,
     mode: str = "klines",
-    symbol: str = "BTCUSDT",
-    timing: str = "1m",
-    start_date="2020-01-01",
+    symbol: str = "LTCUSDT",
+    timing: str = "1h",
+    start_date="2020-01-09",
 ) -> None:
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
@@ -37,7 +37,7 @@ def collect_orderbook(
         )
     else:
         collect_df = pd.read_csv(f"{save_dir}/{symbol}-{timing}.csv")
-        start_date = collect_df.iloc[-1]["date"]
+        start_date = collect_df.iloc[-1]["Date"]
     missing_dates = get_missing_dates(start_date)
     for date in tqdm(missing_dates):
         download_url = (
